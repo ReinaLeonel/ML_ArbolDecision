@@ -17,6 +17,23 @@ def getNombreClases(data, nombreClase, formato='csv'):
     nombreClases = data[nombreClase].unique()
     return nombreClases
 
+def getGraph_graphviz(modelo, X, nombreClases, archivoSalida):
+    dot_data = export_graphviz(
+        modelo,
+        out_file=None,
+        feature_names=X.columns,
+        class_names=nombreClases,
+        filled=True
+    )
+
+    dot_data = dot_data.replace(
+        "digraph Tree {",
+        'digraph Tree {\n dpi=300;\n size="20,20!";\n node [fontname="Helvetica", fontsize=12];'
+    )
+
+    graph = graphviz.Source(dot_data)
+    graph.render(archivoSalida, format="png", cleanup=True)
+
 #--------------------------------------------
 #------------------ Main --------------------
 #--------------------------------------------
@@ -26,6 +43,7 @@ columnasEliminar = [nombreEtiqueta,'Id']
 criterio = 'gini'  # 'gini' o 'entropy'
 profundidadMaxima = 3  # None para sin limite
 datasetName = 'Iris'
+nombreSalidaGraphviz = f'Imagenes/{datasetName}_Depth-{profundidadMaxima}_graph_{criterio}'
 
 data = readData(archivo)
 nombreClases = getNombreClases(data, nombreEtiqueta)
@@ -47,6 +65,8 @@ X_train, X_test, y_train, y_test = train_test_split(
 clf = DecisionTreeClassifier(criterion=criterio, max_depth=profundidadMaxima, random_state=1)
 clf = clf.fit(X_train, y_train)
 y_pred = clf.predict(X_test)
+
+getGraph_graphviz(clf, X, nombreClases, nombreSalidaGraphviz)
 
 metrics = []
 
