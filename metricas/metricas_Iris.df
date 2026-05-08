@@ -1,0 +1,4 @@
+Métricas para el dataset Iris con criterio gini y profundidad máxima 3
+
+   Accuracy  Precision    Recall  F1-Score  Balanced Accuracy  Specificity
+0  0.977778   0.979167  0.977778  0.977753           0.977778     0.988889
