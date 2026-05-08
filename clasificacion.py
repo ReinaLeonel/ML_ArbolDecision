@@ -22,32 +22,10 @@ def getNombreClases(data, nombreClase, formato='csv'):
 #--------------------------------------------
 archivo = './datasets/Iris.csv' 
 nombreEtiqueta = 'Species'
-columnasEliminar = [nombreEtiqueta,'Id']
-criterio = 'gini'  # 'gini' o 'entropy'
-profundidadMaxima = 3  # None para sin limite
 
 data = readData(archivo)
 nombreClases = getNombreClases(data, nombreEtiqueta)
 
-# Separacion de datos en atributos y etiquetas
-X = data.drop(columns=columnasEliminar)
-y = data[nombreEtiqueta]
-
-# Division de los datos en entrenamiento y prueba con hold-out estrateficado en 70%-30%
-X_train, X_test, y_train, y_test = train_test_split(
-    X, 
-    y, 
-    test_size = 0.3,  
-    random_state = 1, 
-    stratify = y       
-)
-
-# Arbol de decision con sklearn
-clf = DecisionTreeClassifier(criterion=criterio, max_depth=profundidadMaxima, random_state=1)
-clf = clf.fit(X_train, y_train)
-y_pred = clf.predict(X_test)
-
-accuracy = accuracy_score(y_test, y_pred)
-
-print(f'Accuracy: {accuracy:.4f}')
+print("Nombre de clases:", nombreClases)
+print("Dataset head: ", data.head())
 
